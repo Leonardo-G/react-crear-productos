@@ -6,6 +6,7 @@ import { Navegacion } from './Navegacion';
 import styles from "../../styles/Header.module.css";
 
 export const Header = () => {
+    const usuario = true
     return (
         <header className={ styles.header }>
             <div className={ styles.contenedorHeader }>
@@ -16,13 +17,28 @@ export const Header = () => {
                     <Buscar />
                     <Navegacion />
                 </div>
-                <div>
-                    <p>Hola: Leonardo</p>
-                    <button
-                        type='button'
-                        >Cerrar Sesión</button>
-                    <Link href="/">Login</Link>
-                    <Link href="/">Crear Cuenta</Link>
+                <div className={ styles.cuenta}>
+                    {
+                        usuario 
+                        ?   <>
+                                <p className={ styles.cuenta_usuario }>Hola: Leonardo</p>
+                                <button className="boton boton--orange">
+                                        Cerrar Sesión
+                                </button>
+                            </>
+                        :   <>
+                                <Link href="/" passHref>
+                                    <button className="boton boton--orange">
+                                        Login
+                                    </button>
+                                </Link>
+                                <Link href="/" passHref>
+                                    <button className="boton boton--wh">
+                                        Crear Cuenta
+                                    </button>
+                                </Link>
+                            </>
+                    }
                 </div>
             </div>
         </header>

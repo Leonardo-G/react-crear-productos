@@ -1,0 +1,26 @@
+.boton{
+    font-weight: 700;
+    text-transform: uppercase;
+    border: 1px solid #d1d1d1;
+    padding: .8rem 2rem;
+    margin-right: 1rem;
+    color: #fff;
+}
+
+.boton:hover{
+    cursor: pointer;
+}
+
+.boton:last-of-type{
+    margin-right: 0;    
+}
+
+.boton--orange{
+    background-color: #fa552f;
+    color: #fff;
+}
+
+.boton--wh{
+    background-color: transparent;
+    color: #000;
+}

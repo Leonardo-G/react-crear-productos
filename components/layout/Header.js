@@ -1,14 +1,27 @@
 import Link from 'next/link'
 import React from 'react'
+import { Buscar } from '../UI/Buscar'
+import { Navegacion } from './Navegacion'
 
 export const Header = () => {
     return (
         <header>
-            <h1>Desde el Header</h1>
-            <nav>
-                <Link href="/">Inicio</Link>
-                <Link href="/nosotros">Nosotros</Link>
-            </nav>
+            <div>
+                <div>
+                    <p>P</p>
+                    <Buscar />
+                    <Navegacion />
+                </div>
+            </div>
+            <div>
+                <p>Hola: Leonardo</p>
+                <button
+                    type='button'
+                >Cerrar Sesión</button>
+                <Link href="/">Login</Link>
+                <Link href="/">Crear Cuenta</Link>
+            </div>
+            
         </header>
     )
 }

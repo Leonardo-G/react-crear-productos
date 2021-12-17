@@ -21,6 +21,7 @@ body{
 a {
   color: inherit;
   text-decoration: none;
+  color: var(--gris2)
 }
 
 h1, h2, h3{

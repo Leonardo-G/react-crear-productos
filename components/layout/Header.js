@@ -10,14 +10,14 @@ export const Header = () => {
     return (
         <header className={ styles.header }>
             <div className={ styles.contenedorHeader }>
-                <div>
+                <div className={ styles.flex }>
                     <Link href="/" passHref>
                         <p className={ styles.logo }>P</p>
                     </Link>
                     <Buscar />
                     <Navegacion />
                 </div>
-                <div className={ styles.cuenta}>
+                <div className={ styles.flex }>
                     {
                         usuario 
                         ?   <>

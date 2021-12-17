@@ -1,0 +1,9 @@
+.navegacion{
+    padding-left: 2rem;
+    display: flex;
+    column-gap: 2rem;
+}
+
+.enlace:last-of-type{
+    margin-right: 0;
+}

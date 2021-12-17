@@ -6,7 +6,7 @@ import { Navegacion } from './Navegacion';
 import styles from "../../styles/Header.module.css";
 
 export const Header = () => {
-    const usuario = true
+    const usuario = false
     return (
         <header className={ styles.header }>
             <div className={ styles.contenedorHeader }>
@@ -27,12 +27,12 @@ export const Header = () => {
                                 </button>
                             </>
                         :   <>
-                                <Link href="/" passHref>
+                                <Link href="/login" passHref>
                                     <button className="boton boton--orange">
                                         Login
                                     </button>
                                 </Link>
-                                <Link href="/" passHref>
+                                <Link href="/crear-cuenta" passHref>
                                     <button className="boton boton--wh">
                                         Crear Cuenta
                                     </button>

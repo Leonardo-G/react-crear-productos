@@ -8,8 +8,8 @@ export const Navegacion = () => {
         <>
             <nav className={ styles.navegacion }>
                 <Link href="/">Inicio</Link>
-                <Link href="/nosotros">Populares</Link>
-                <Link href="/nosotros">Nuevo Producto</Link>
+                <Link href="/populares">Populares</Link>
+                <Link href="/nuevo-producto">Nuevo Producto</Link>
             </nav>
         </>
     )

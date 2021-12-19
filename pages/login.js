@@ -6,6 +6,7 @@ import useValidacion from '../hooks/useValidacion';
 import { validarCrearCuenta } from '../helpers/validarCuenta';
 
 import styles from "../styles/Formularios.module.css"
+import { validarInicioSesion } from '../helpers/validarInicioSesion';
 
 //estado inicial
 const state_Inicial = {
@@ -20,16 +21,15 @@ const Login = () => {
     const { iniciarSesion } = useContext( FirebaseContext )
 
     const crearCuenta = async () => {
+        
         try {
-            const inicio = await iniciarSesion( email, password );
-            console.log(inicio)
+            const usuario = await iniciarSesion( email, password );
         } catch (error) {
-            console.log(error.message);
-            setError(error.message)
+            setError(error.code)
         }
     }
 
-    const { valores, errores, handleSubmit, handleChange, handleBlur } = useValidacion(state_Inicial, validarCrearCuenta, crearCuenta);
+    const { valores, errores, handleSubmit, handleChange, handleBlur } = useValidacion(state_Inicial, validarInicioSesion, crearCuenta);
     const { email, password } = valores
 
     return (

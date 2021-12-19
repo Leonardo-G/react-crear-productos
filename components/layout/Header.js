@@ -1,12 +1,15 @@
 import Link from 'next/link'
-import React from 'react'
+import React, { useContext } from 'react'
 import { Buscar } from '../UI/Buscar'
 import { Navegacion } from './Navegacion';
 
 import styles from "../../styles/Header.module.css";
+import { FirebaseContext } from '../../firebase/context';
 
 export const Header = () => {
-    const usuario = false
+
+    const { usuario } = useContext( FirebaseContext )
+
     return (
         <header className={ styles.header }>
             <div className={ styles.contenedorHeader }>
@@ -21,7 +24,7 @@ export const Header = () => {
                     {
                         usuario 
                         ?   <>
-                                <p className={ styles.cuenta_usuario }>Hola: Leonardo</p>
+                                <p className={ styles.cuenta_usuario }>{ usuario.displayName }</p>
                                 <button className="boton boton--orange">
                                         Cerrar Sesión
                                 </button>

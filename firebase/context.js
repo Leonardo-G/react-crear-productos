@@ -1,7 +1,8 @@
 import React, { createContext } from 'react';
 import "firebase/auth";
-import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from './config';
+import { useAutenticacion } from '../hooks/useAutenticacion';
 
 export const FirebaseContext = createContext();
 
@@ -21,10 +22,13 @@ export const FirebaseFn = ({ children }) => {
         return await signInWithEmailAndPassword( auth, email, password )
     }
 
+    const usuario = useAutenticacion();
+    
     return (
         <FirebaseContext.Provider value={{
             agregarUsuario,
-            iniciarSesion
+            iniciarSesion,
+            usuario
         }}>
             { children }
         </FirebaseContext.Provider>

@@ -23,7 +23,8 @@ const Login = () => {
     const crearCuenta = async () => {
         
         try {
-            const usuario = await iniciarSesion( email, password );
+            const inicio = await iniciarSesion( email, password );
+            router.push("/")
         } catch (error) {
             setError(error.code)
         }

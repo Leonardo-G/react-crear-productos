@@ -11,7 +11,7 @@ const useValidacion = ( stateInicial, validar, fn ) => {
             const noErrores = Object.keys(errores).length === 0;
 
             if(noErrores){
-                fn(); //Fn = Funcion que se ejecut en el componente
+                fn(); //Fn = Funcion que se ejecuta en el componente
             }
             setSubmitForm(false)
         }

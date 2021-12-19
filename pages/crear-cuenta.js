@@ -1,5 +1,8 @@
-import React from 'react';
+import { route } from 'next/dist/server/router';
+import { Router, useRouter } from 'next/router';
+import React, { useContext, useState } from 'react';
 import { Layout } from '../components/layout/Layout';
+import { FirebaseContext } from '../firebase/context';
 import { validarCrearCuenta } from '../helpers/validarCuenta';
 import useValidacion from '../hooks/useValidacion';
 
@@ -13,14 +16,22 @@ const state_Inicial = {
 
 const CrearCuenta = () => {
 
-    const crearCuenta = () => {
-        console.log("creando cuenta")
+    const [error, setError] = useState("");
+    const router = useRouter()
+    const { agregarUsuario } = useContext( FirebaseContext )
+
+    const crearCuenta = async () => {
+        try {
+            const usuarioNuevo = await agregarUsuario( nombre, email, password );
+            router.push("/")
+        } catch (error) {
+            console.log(error.message);
+            setError(error.message)
+        }
     }
 
     const { valores, errores, handleSubmit, handleChange, handleBlur } = useValidacion(state_Inicial, validarCrearCuenta, crearCuenta);
-
     const { nombre, email, password } = valores
-
 
     return (
         <div>
@@ -78,6 +89,9 @@ const CrearCuenta = () => {
                     </div>
                     {
                         errores.password && <p className={ styles.errores }>{ errores.password }</p>
+                    }
+                    {
+                        error !== "" && <p className={ styles.errores }>{ error }</p>
                     }
                     <input 
                         className='boton boton--orange block'

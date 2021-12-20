@@ -9,6 +9,13 @@
     margin: 5rem auto 0 auto;
 }
 
+.fieldset{
+    margin: 2rem 0;
+    border: 1px solid #e1e1e1;
+    font-size: 2rem;
+    padding: 2rem;
+}
+
 .campo{
     margin-bottom: 2rem;
     display: flex;
@@ -21,6 +28,12 @@
 }
 
 .campo_input{
+    flex: 1;
+    padding: 1rem;
+}
+
+.campo_textarea{
+    height: 40rem;
     flex: 1;
     padding: 1rem;
 }

@@ -1,8 +1,9 @@
 import React, { createContext } from 'react';
 import "firebase/auth";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile } from 'firebase/auth';
-import { auth } from './config';
+import { applyActionCode, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile } from 'firebase/auth';
+import { auth, db } from './config';
 import { useAutenticacion } from '../hooks/useAutenticacion';
+import { addDoc, collection } from 'firebase/firestore';
 
 export const FirebaseContext = createContext();
 
@@ -29,12 +30,19 @@ export const FirebaseFn = ({ children }) => {
         await signOut( auth )
     }
 
+    //Crear productos
+    const agregarDatosColeccion = async ( datos, coleccion ) => {
+        
+        return await addDoc( collection( db, coleccion ), datos );
+    }
+
     return (
         <FirebaseContext.Provider value={{
             agregarUsuario,
             iniciarSesion,
             usuario,
-            cerrarSesion
+            cerrarSesion,
+            agregarDatosColeccion
         }}>
             { children }
         </FirebaseContext.Provider>

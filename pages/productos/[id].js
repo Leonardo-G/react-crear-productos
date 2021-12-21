@@ -12,7 +12,9 @@ const Producto = () => {
 
     const [producto, setProducto] = useState({});
     const [error, setError] = useState(false);
-    const [comentario, setcomentario] = useState(initialState)
+    const [comentario, setComentario] = useState({
+        mensaje: ""
+    })
 
     const { query: { id }, push } = useRouter();
     const { obtenerDocumento, usuario, actualizarCampos } = useContext( FirebaseContext );
@@ -51,6 +53,37 @@ const Producto = () => {
             votos: votos + 1
         })
     }
+
+    
+    const crearComentario = async (e) => {
+        e.preventDefault();
+
+        if(!usuario){
+            return push("/login")
+        }
+
+        //Informacion del comnetario
+        comentario.usuarioId = usuario.uid;
+        comentario.usuarioNombre = usuario.displayName;
+
+        //Tomar copia de comentario y agregarlo al arreglo
+        const comentariosActual = [ ...comentarios, comentario ];
+
+        //Actualizar Firebase
+        await actualizarCampos( "productos", id, { comentarios: comentariosActual } );
+        
+        //Actualizar el state
+        setProducto({
+            ...producto,
+            comentarios: comentariosActual
+        })
+        
+        //Reiniciar el input
+        setComentario({
+            mensaje: ""
+        });
+    }
+
     return ( 
         <Layout>
             {
@@ -77,11 +110,16 @@ const Producto = () => {
                                     usuario &&
                                     <>
                                         <h2>Agrega tu comentario</h2>
-                                        <form>
+                                        <form onSubmit={ crearComentario }>
                                             <div className={ stylesForm.campo }>
                                                 <input 
                                                     type="text"
                                                     name='mensaje'
+                                                    onChange={ e => setComentario({
+                                                        ...comentario,
+                                                        [e.target.name]: e.target.value
+                                                    }) }
+                                                    value={ comentario.mensaje }
                                                     className={ stylesForm.campo_input }
                                                 />
                                             </div>
@@ -93,13 +131,27 @@ const Producto = () => {
                                     </>
                                 }
                                 <h2>Comentarios</h2>
-                                {   
-                                    comentarios &&
-                                    comentarios.map( (comentario, idx) => (
-                                        <li key={idx + 1}>
-                                            <p>sdasd</p>
-                                        </li>
-                                    ))
+                                {
+                                    comentarios && 
+                                    comentarios.length === 0
+                                    ?   <p>No hay comentarios</p>
+                                    :
+                                        <ul>
+                                            {   
+                                                comentarios &&
+                                                comentarios.map( (comentario, idx) => (
+                                                    <li 
+                                                        key={idx + 1}
+                                                        style={{ "border": "1px solid #e1e1e1", "padding": "2rem"}}    
+                                                    >
+                                                        <p>{ comentario.mensaje }</p>
+                                                        <p>Escrito por: 
+                                                            <span style={{ "fontWeight": "bold" }}> { comentario.usuarioNombre }</span>
+                                                        </p>
+                                                    </li>
+                                                ))
+                                            }
+                                        </ul>
                                 }
                             </div>
                             <aside>

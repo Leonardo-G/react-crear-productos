@@ -28,7 +28,6 @@ const NuevoProducto = () => {
         if(!usuario){
             router.push("/login");
         }
-        
         const imageRef = ref(storage, 'products/' + imagen.name)
         
         // const archivoPath = storageRef.child(image)
@@ -44,7 +43,11 @@ const NuevoProducto = () => {
             descripcion,
             votos: 0,
             comentarios: [],
-            creado: Date.now()
+            creado: Date.now(),
+            creador: {
+                id: usuario.uid,
+                nombre: usuario.displayName 
+            }
         }
 
         //Insertar la base de datos
@@ -77,7 +80,7 @@ const NuevoProducto = () => {
                                 className={ styles.campo_input }
                                 type="text"
                                 id="nombre"
-                                placeholder='Tu Nombre'
+                                placeholder='Nombre del Producto'
                                 name='nombre'
                                 value={nombre}
                                 onChange={ handleChange }

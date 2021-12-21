@@ -13,11 +13,12 @@ const Producto = () => {
     const [error, setError] = useState(false);
 
     const { query: { id } } = useRouter();
-    const { obtenerDocumento } = useContext( FirebaseContext );
+    const { obtenerDocumento, usuario } = useContext( FirebaseContext );
     
     const documento = async () => {
          const documentoProducto = await obtenerDocumento("productos", id);
          if(documentoProducto.isExist){
+             console.log(documentoProducto)
              setProducto(documentoProducto);
          }else{
              setError(true);
@@ -30,8 +31,8 @@ const Producto = () => {
         }
     }, [ id ])
 
-    const { nombre, creado, urlImagen, descripcion, comentarios, url, votos } = producto
-
+    const { nombre, creado, empresa, urlImagen, descripcion, comentarios, url, votos, creador } = producto
+    console.log(creador)
     return ( 
         <Layout>
             {
@@ -43,27 +44,36 @@ const Producto = () => {
                         <h1 style={{"textAlign": "center", "marginTop": "5rem"}}>{ nombre }</h1>
                         <div className={ styles.contenedor_producto}>
                             <div>
-                            {
-                                ( new Date().getDay() - new Date(Number(creado)).getDay() ) == 0
-                                ?   <p>Creado hace: { new Date().getHours() - new Date(Number(creado)).getHours() } Horas</p>
-                                :   <p>Creado hace: { new Date().getDay() - new Date(Number(creado)).getDay() } Dia</p>
-                            }
+                                {
+                                    ( new Date().getDay() - new Date(Number(creado)).getDay() ) == 0
+                                    ?   <p>Creado hace: { new Date().getHours() - new Date(Number(creado)).getHours() } Horas</p>
+                                    :   <p>Creado hace: { new Date().getDay() - new Date(Number(creado)).getDay() } Dia</p>
+                                }
+                                {
+                                    creador &&
+                                    <p>Por: { creador.nombre } de { empresa }</p>
+                                }
                                 <img src={ urlImagen } alt={ nombre }/>
                                 <p>{ descripcion }</p>
-                                <h2>Agrega tu comentario</h2>
-                                <form>
-                                    <div className={ stylesForm.campo }>
-                                        <input 
-                                            type="text"
-                                            name='mensaje'
-                                            className={ stylesForm.campo_input }
-                                        />
-                                    </div>
-                                    <input 
-                                        type="submit"
-                                        className='boton boton--orange block'
-                                    />
-                                </form>
+                                {
+                                    usuario &&
+                                    <>
+                                        <h2>Agrega tu comentario</h2>
+                                        <form>
+                                            <div className={ stylesForm.campo }>
+                                                <input 
+                                                    type="text"
+                                                    name='mensaje'
+                                                    className={ stylesForm.campo_input }
+                                                />
+                                            </div>
+                                            <input 
+                                                type="submit"
+                                                className='boton boton--orange block'
+                                            />
+                                        </form>
+                                    </>
+                                }
                                 <h2>Comentarios</h2>
                                 {   
                                     comentarios &&
@@ -81,9 +91,12 @@ const Producto = () => {
                                     className='boton boton--orange block'
                                     rel="noreferrer"
                                 >Visitar URL</a>
-                                <button
-                                    className='boton block boton--wh'
-                                >Votar</button>
+                                {
+                                    usuario &&
+                                    <button
+                                        className='boton block boton--wh'
+                                    >Votar</button>
+                                }
                                 <p style={{ "textAlign": "center" }}>{ votos } Votos</p>
                             </aside>
                         </div>

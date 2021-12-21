@@ -2,10 +2,9 @@ import React from 'react';
 import styles from "../../styles/DetallesProducto.module.css";
 import imgComentario from "../../public/img/comentario.png"
 import Image from 'next/image';
+import Link from 'next/link';
 
 export const DetallesProducto = ({ id, comentarios, creado, descripcion, empresa, nombre, url, urlImagen, votos }) => {
-    
-    
     
     return (
         <li className={ styles.producto }>
@@ -17,8 +16,10 @@ export const DetallesProducto = ({ id, comentarios, creado, descripcion, empresa
                     }
                 </div>
                 <div>
-                    <h1>{ nombre }</h1>
-                    <p>{ descripcion }</p>
+                    <Link href="/productos/[id]" as={`/productos/${id}`}>
+                        <a className={ styles.titulo }>{ nombre }</a>
+                    </Link>
+                    <p className={ styles.descripcionTexto }>{ descripcion }</p>
                     <div className={ styles.descripcion_comentarios }>
                         <div>
                             <Image width={20} height={20} src={ imgComentario } alt='comentarios'/>

@@ -25,6 +25,11 @@
     column-gap: 2rem;
 }
 
+.descripcionTexto{
+    margin: 0;
+    color: #888;
+}
+
 .descripcion_comentarios{
     margin-top: 2rem;
     display: flex;

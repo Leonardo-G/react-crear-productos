@@ -8,6 +8,7 @@ import { ref, getDownloadURL, uploadBytesResumable } from '@firebase/storage';
 import useValidacion from '../hooks/useValidacion';
 
 import styles from "../styles/Formularios.module.css";
+import { Error404 } from '../components/layout/404';
 
 const state_Inicial = {
     nombre: "",
@@ -47,7 +48,8 @@ const NuevoProducto = () => {
             creador: {
                 id: usuario.uid,
                 nombre: usuario.displayName 
-            }
+            },
+            votantes: []
         }
 
         //Insertar la base de datos
@@ -61,110 +63,118 @@ const NuevoProducto = () => {
     }
 
     const { valores, errores, handleSubmit, handleChange, handleBlur } = useValidacion(state_Inicial, validarCrearProducto, agregar);
-    const { nombre, empresa, url, descripcion } = valores
+    const { nombre, empresa, url, descripcion } = valores;
 
     return (
         <div>
             <Layout>
-                <h1 className={ styles.titulo_formulario }>Nuevo Producto</h1>
-                <form 
-                    className={ styles.formulario } 
-                    onSubmit={ handleSubmit }
-                    noValidate
-                >
-                    <fieldset className={ styles.fieldset}>
-                        <legend>Información General</legend>
-                        <div className={ styles.campo }>
-                            <label htmlFor='nombre' className={ styles.campo_label }>Nombre</label>
-                            <input 
-                                className={ styles.campo_input }
-                                type="text"
-                                id="nombre"
-                                placeholder='Nombre del Producto'
-                                name='nombre'
-                                value={nombre}
-                                onChange={ handleChange }
-                                onBlur={ handleBlur }
-                            />
-                        </div>
-                        {
-                            errores.nombre && <p className={ styles.errores }>{ errores.nombre }</p>
-                        }
-                        <div className={ styles.campo }>
-                            <label htmlFor='empresa' className={ styles.campo_label }>Empresa</label>
-                            <input 
-                                className={ styles.campo_input }
-                                type="text"
-                                id="empresa"
-                                placeholder='Nombre Empresa o Compañia'
-                                name='empresa'
-                                value={empresa}
-                                onChange={ handleChange }
-                                onBlur={ handleBlur }
-                            />
-                        </div>
-                        {
-                            errores.empresa && <p className={ styles.errores }>{ errores.empresa }</p>
-                        }
-                        <div className={ styles.campo }>
-                            <label htmlFor='imagen' className={ styles.campo_label }>Imagen</label>
-                            <input
-                                className={ styles.campo_input }
-                                type="file"
-                                accept='image/*'
-                                id="imagen"
-                                name='imagen'
-                                onChange={ handleFileImg }
-                                onBlur={ handleBlur }
-                            />
-                        </div>
-                        {
-                            errores.imagen && <p className={ styles.errores }>{ errores.imagen }</p>
-                        } 
-                        <div className={ styles.campo }>
-                            <label htmlFor='url' className={ styles.campo_label }>URL</label>
-                            <input 
-                                className={ styles.campo_input }
-                                type="url"
-                                id="url"
-                                name='url'
-                                value={url}
-                                placeholder="URL de tu producto"
-                                onChange={ handleChange }
-                                onBlur={ handleBlur }
-                            />
-                        </div>
-                        {
-                            errores.url && <p className={ styles.errores }>{ errores.url }</p>
-                        }
-                    </fieldset>
-                    <fieldset className={ styles.fieldset}>
-                        <legend>Sobre tu Producto</legend>
-                        <div className={ styles.campo }>
-                            <label htmlFor='descripcion' className={ styles.campo_label }>Descripción</label>
-                            <input 
-                                className={ styles.campo_textarea }
-                                type="textarea"
-                                id="descripcion"
-                                name='descripcion'
-                                value={descripcion}
-                                onChange={ handleChange }
-                                onBlur={ handleBlur }
-                            />
-                        </div>
-                        {
-                            errores.descripcion && <p className={ styles.errores }>{ errores.descripcion }</p>
-                        }
-                    </fieldset>
-                        {
-                            error !== "" && <p className={ styles.errores }>{ error }</p>
-                        }
-                        <input 
-                            className='boton boton--orange block'
-                            type="submit"
-                            value="Crear Producto"
-                        />
-                </form>
+                {
+                    !usuario
+                    ? <Error404 />
+                    :
+                    <>
+                        <h1 className={ styles.titulo_formulario }>Nuevo Producto</h1>
+                        <form 
+                            className={ styles.formulario } 
+                            onSubmit={ handleSubmit }
+                            noValidate
+                        >
+                            <fieldset className={ styles.fieldset}>
+                                <legend>Información General</legend>
+                                <div className={ styles.campo }>
+                                    <label htmlFor='nombre' className={ styles.campo_label }>Nombre</label>
+                                    <input 
+                                        className={ styles.campo_input }
+                                        type="text"
+                                        id="nombre"
+                                        placeholder='Nombre del Producto'
+                                        name='nombre'
+                                        value={nombre}
+                                        onChange={ handleChange }
+                                        onBlur={ handleBlur }
+                                    />
+                                </div>
+                                {
+                                    errores.nombre && <p className={ styles.errores }>{ errores.nombre }</p>
+                                }
+                                <div className={ styles.campo }>
+                                    <label htmlFor='empresa' className={ styles.campo_label }>Empresa</label>
+                                    <input 
+                                        className={ styles.campo_input }
+                                        type="text"
+                                        id="empresa"
+                                        placeholder='Nombre Empresa o Compañia'
+                                        name='empresa'
+                                        value={empresa}
+                                        onChange={ handleChange }
+                                        onBlur={ handleBlur }
+                                    />
+                                </div>
+                                {
+                                    errores.empresa && <p className={ styles.errores }>{ errores.empresa }</p>
+                                }
+                                <div className={ styles.campo }>
+                                    <label htmlFor='imagen' className={ styles.campo_label }>Imagen</label>
+                                    <input
+                                        className={ styles.campo_input }
+                                        type="file"
+                                        accept='image/*'
+                                        id="imagen"
+                                        name='imagen'
+                                        onChange={ handleFileImg }
+                                        onBlur={ handleBlur }
+                                    />
+                                </div>
+                                {
+                                    errores.imagen && <p className={ styles.errores }>{ errores.imagen }</p>
+                                } 
+                                <div className={ styles.campo }>
+                                    <label htmlFor='url' className={ styles.campo_label }>URL</label>
+                                    <input 
+                                        className={ styles.campo_input }
+                                        type="url"
+                                        id="url"
+                                        name='url'
+                                        value={url}
+                                        placeholder="URL de tu producto"
+                                        onChange={ handleChange }
+                                        onBlur={ handleBlur }
+                                    />
+                                </div>
+                                {
+                                    errores.url && <p className={ styles.errores }>{ errores.url }</p>
+                                }
+                            </fieldset>
+                            <fieldset className={ styles.fieldset}>
+                                <legend>Sobre tu Producto</legend>
+                                <div className={ styles.campo }>
+                                    <label htmlFor='descripcion' className={ styles.campo_label }>Descripción</label>
+                                    <input 
+                                        className={ styles.campo_textarea }
+                                        type="textarea"
+                                        id="descripcion"
+                                        name='descripcion'
+                                        value={descripcion}
+                                        onChange={ handleChange }
+                                        onBlur={ handleBlur }
+                                    />
+                                </div>
+                                {
+                                    errores.descripcion && <p className={ styles.errores }>{ errores.descripcion }</p>
+                                }
+                            </fieldset>
+                                {
+                                    error !== "" && <p className={ styles.errores }>{ error }</p>
+                                }
+                                <input 
+                                    className='boton boton--orange block'
+                                    type="submit"
+                                    value="Crear Producto"
+                                />
+                        </form>
+                    </>
+                }
+                
             </Layout>
         </div>
     )

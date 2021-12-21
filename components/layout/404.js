@@ -5,7 +5,7 @@ export const Error404 = () => {
         <div>
             <h1
                 style={{ "margin-top": "5rem", "textAlign": "center" }}
-            >Producto no Existente</h1>
+            >No se puede mostrar</h1>
         </div>
     )
 }

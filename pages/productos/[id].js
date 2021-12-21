@@ -6,14 +6,16 @@ import { FirebaseContext } from '../../firebase/context';
 
 import styles from "../../styles/Productos_id.module.css";
 import stylesForm from "../../styles/Formularios.module.css";
+import { updateDoc } from 'firebase/firestore';
 
 const Producto = () => {
 
     const [producto, setProducto] = useState({});
     const [error, setError] = useState(false);
+    const [comentario, setcomentario] = useState(initialState)
 
-    const { query: { id } } = useRouter();
-    const { obtenerDocumento, usuario } = useContext( FirebaseContext );
+    const { query: { id }, push } = useRouter();
+    const { obtenerDocumento, usuario, actualizarCampos } = useContext( FirebaseContext );
     
     const documento = async () => {
          const documentoProducto = await obtenerDocumento("productos", id);
@@ -31,8 +33,24 @@ const Producto = () => {
         }
     }, [ id ])
 
-    const { nombre, creado, empresa, urlImagen, descripcion, comentarios, url, votos, creador } = producto
-    console.log(creador)
+    const { nombre, creado, empresa, urlImagen, descripcion, comentarios, url, votos, creador, votantes } = producto
+    
+    const votarProducto = async () => {
+        if(!usuario){
+            return push("/login")
+        }
+
+        if(votantes.includes(usuario.uid)) return;
+
+
+        //Actualizar en Firebase
+        await actualizarCampos("productos", id, { votos: votos + 1, votantes: [...votantes, usuario.uid]})
+
+        setProducto({
+            ...producto,
+            votos: votos + 1
+        })
+    }
     return ( 
         <Layout>
             {
@@ -94,6 +112,7 @@ const Producto = () => {
                                 {
                                     usuario &&
                                     <button
+                                        onClick={ votarProducto }
                                         className='boton block boton--wh'
                                     >Votar</button>
                                 }

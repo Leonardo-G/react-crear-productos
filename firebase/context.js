@@ -3,7 +3,7 @@ import "firebase/auth";
 import { applyActionCode, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile } from 'firebase/auth';
 import { auth, db } from './config';
 import { useAutenticacion } from '../hooks/useAutenticacion';
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection, getDocs, orderBy } from 'firebase/firestore';
 
 export const FirebaseContext = createContext();
 
@@ -36,13 +36,27 @@ export const FirebaseFn = ({ children }) => {
         return await addDoc( collection( db, coleccion ), datos );
     }
 
+    const obtenerDatosColeccionOrdenado = async ( coleccion, campo ) => {
+        const docs = await getDocs( collection( db, coleccion ), orderBy( campo, "asc" ) );
+        
+        let array = []
+        docs.forEach( doc => {
+            array.push({
+                id: doc.id,
+                ...doc.data()
+            }) 
+        })
+        return array
+    }
+
     return (
         <FirebaseContext.Provider value={{
             agregarUsuario,
             iniciarSesion,
             usuario,
             cerrarSesion,
-            agregarDatosColeccion
+            agregarDatosColeccion,
+            obtenerDatosColeccionOrdenado
         }}>
             { children }
         </FirebaseContext.Provider>

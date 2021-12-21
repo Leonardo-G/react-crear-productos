@@ -1,9 +1,10 @@
 import { useRouter } from 'next/router';
 import React, { useContext, useState } from 'react'
 import { Layout } from '../components/layout/Layout';
+import { storage } from '../firebase/config';
 import { FirebaseContext } from '../firebase/context';
 import { validarCrearProducto } from '../helpers/validarCrearProducto';
-import { validarCrearCuenta } from '../helpers/validarCuenta';
+import { ref, getDownloadURL, uploadBytesResumable } from '@firebase/storage';
 import useValidacion from '../hooks/useValidacion';
 
 import styles from "../styles/Formularios.module.css";
@@ -12,11 +13,13 @@ const state_Inicial = {
     nombre: "",
     empresa: "",
     url: "",
+    imagenUrl: "",
     descripcion: "",
 }
 
 const NuevoProducto = () => {
 
+    const [imagen, setImagen] = useState(null)
     const [error, setError] = useState("");
     const router = useRouter()
     const { usuario, agregarDatosColeccion } = useContext( FirebaseContext )
@@ -26,11 +29,18 @@ const NuevoProducto = () => {
             router.push("/login");
         }
         
+        const imageRef = ref(storage, 'products/' + imagen.name)
+        
+        // const archivoPath = storageRef.child(image)
+        const uploadTask = await uploadBytesResumable(imageRef, imagen)
+        const urlImagen = await getDownloadURL(imageRef);
+        
         //Objeto de nuevos productos
         const producto = {
             nombre,
             empresa,
             url,
+            urlImagen,
             descripcion,
             votos: 0,
             comentarios: [],
@@ -38,11 +48,17 @@ const NuevoProducto = () => {
         }
 
         //Insertar la base de datos
-        agregarDatosColeccion( producto, "productos" );
+        await agregarDatosColeccion( producto, "productos" );
+
+        return router.push("/");
+    }
+
+    const handleFileImg = e => {
+        setImagen(e.target.files[0]);
     }
 
     const { valores, errores, handleSubmit, handleChange, handleBlur } = useValidacion(state_Inicial, validarCrearProducto, agregar);
-    const { nombre, empresa, imagen, url, descripcion } = valores
+    const { nombre, empresa, url, descripcion } = valores
 
     return (
         <div>
@@ -87,21 +103,21 @@ const NuevoProducto = () => {
                         {
                             errores.empresa && <p className={ styles.errores }>{ errores.empresa }</p>
                         }
-                        {/* <div className={ styles.campo }>
+                        <div className={ styles.campo }>
                             <label htmlFor='imagen' className={ styles.campo_label }>Imagen</label>
-                            <input 
+                            <input
                                 className={ styles.campo_input }
                                 type="file"
+                                accept='image/*'
                                 id="imagen"
                                 name='imagen'
-                                value={imagen}
-                                onChange={ handleChange }
+                                onChange={ handleFileImg }
                                 onBlur={ handleBlur }
                             />
                         </div>
                         {
                             errores.imagen && <p className={ styles.errores }>{ errores.imagen }</p>
-                        } */}
+                        } 
                         <div className={ styles.campo }>
                             <label htmlFor='url' className={ styles.campo_label }>URL</label>
                             <input 

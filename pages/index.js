@@ -11,10 +11,12 @@ export default function Home() {
   const obtenerDatos = async () => {
     const datos = await obtenerDatosColeccionOrdenado("productos", "creado");
     setProductos(datos)
+    console.log(datos)
   }
 
   useEffect(() => {
     obtenerDatos();
+
   }, [])
 
   return (
@@ -23,7 +25,8 @@ export default function Home() {
             <div className='listado-productos'>
                 <div className='contenedor'>
                     <div className='bg-white'>
-                        { 
+                        {   
+                            productos.length > 0 &&
                             productos.map( producto => (
                                 <DetallesProducto key={ producto.id } { ...producto }/>
                             ))

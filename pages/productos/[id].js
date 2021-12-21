@@ -54,7 +54,6 @@ const Producto = () => {
         })
     }
 
-    
     const crearComentario = async (e) => {
         e.preventDefault();
 
@@ -82,6 +81,14 @@ const Producto = () => {
         setComentario({
             mensaje: ""
         });
+    }
+
+    //Identifica si el comentario es creador del productos
+    const esCreador = (idComentario) => {
+        
+        if( creador.id === idComentario ){
+            return true
+        }
     }
 
     return ( 
@@ -148,6 +155,10 @@ const Producto = () => {
                                                         <p>Escrito por: 
                                                             <span style={{ "fontWeight": "bold" }}> { comentario.usuarioNombre }</span>
                                                         </p>
+                                                        {
+                                                            esCreador( comentario.usuarioId ) &&
+                                                            <p className={ styles.comentario_creador }>Creador</p>
+                                                        }
                                                     </li>
                                                 ))
                                             }

@@ -1,5 +1,11 @@
-.contenedor_producto{
-
+.comentario_creador{
+    padding: .5rem 2rem;
+    background-color: #da552f;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: bold;
+    display: inline-block;
+    text-align: center;
 }
 
 @media (min-width: 768px) {

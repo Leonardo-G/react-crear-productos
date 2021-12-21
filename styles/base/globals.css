@@ -35,6 +35,10 @@ ul{
   padding: 0;
 }
 
+img{
+  max-width: 100%;
+}
+
 .listado-productos{
   background-color: #f3f3f3;
 }

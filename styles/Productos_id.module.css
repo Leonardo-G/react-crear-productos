@@ -1,0 +1,11 @@
+.contenedor_producto{
+
+}
+
+@media (min-width: 768px) {
+    .contenedor_producto{
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        column-gap: 2rem;
+    }
+}

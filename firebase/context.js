@@ -4,7 +4,7 @@ import { applyActionCode, createUserWithEmailAndPassword, signInWithEmailAndPass
 import { auth, db, storage } from './config';
 import { useAutenticacion } from '../hooks/useAutenticacion';
 import { ref, deleteObject } from '@firebase/storage';
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, orderBy, updateDoc } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, orderBy, query, updateDoc } from 'firebase/firestore';
 
 export const FirebaseContext = createContext();
 
@@ -36,8 +36,8 @@ export const FirebaseFn = ({ children }) => {
         return await addDoc( collection( db, coleccion ), datos );
     }
 
-    const obtenerDatosColeccionOrdenado = async ( coleccion, campo ) => {
-        const docs = await getDocs( collection( db, coleccion ), orderBy( campo, "asc" ) );
+    const obtenerDatosColeccionOrdenado = async ( coleccion, campo, order ) => {
+        const docs = await getDocs( query(collection( db, coleccion ), orderBy( campo, order )) );
         
         let array = []
         docs.forEach( doc => {

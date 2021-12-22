@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 export const DetallesProducto = ({ id, comentarios, creado, descripcion, empresa, nombre, url, urlImagen, votos }) => {
-    
+    console.log(new Date(creado).getDay())
     return (
         <li className={ styles.producto }>
             <div className={ styles.descripcion }>

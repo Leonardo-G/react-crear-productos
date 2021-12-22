@@ -9,7 +9,7 @@ export default function Home() {
   const { obtenerDatosColeccionOrdenado } = useContext( FirebaseContext )
 
   const obtenerDatos = async () => {
-    const datos = await obtenerDatosColeccionOrdenado("productos", "creado");
+    const datos = await obtenerDatosColeccionOrdenado("productos", "creado", "desc");
     setProductos(datos)
     console.log(datos)
   }

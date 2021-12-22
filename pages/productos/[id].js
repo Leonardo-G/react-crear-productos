@@ -6,7 +6,6 @@ import { FirebaseContext } from '../../firebase/context';
 
 import styles from "../../styles/Productos_id.module.css";
 import stylesForm from "../../styles/Formularios.module.css";
-import { updateDoc } from 'firebase/firestore';
 
 const Producto = () => {
 
@@ -17,7 +16,7 @@ const Producto = () => {
     })
 
     const { query: { id }, push } = useRouter();
-    const { obtenerDocumento, usuario, actualizarCampos } = useContext( FirebaseContext );
+    const { obtenerDocumento, usuario, actualizarCampos, borrarImagen, eliminarDocumento } = useContext( FirebaseContext );
     
     const documento = async () => {
          const documentoProducto = await obtenerDocumento("productos", id);
@@ -33,6 +32,7 @@ const Producto = () => {
         if(id){
             documento();
         }
+
     }, [ id ])
 
     const { nombre, creado, empresa, urlImagen, descripcion, comentarios, url, votos, creador, votantes } = producto
@@ -85,10 +85,27 @@ const Producto = () => {
 
     //Identifica si el comentario es creador del productos
     const esCreador = (idComentario) => {
-        
         if( creador.id === idComentario ){
             return true
         }
+    }
+
+    //Funcion que revisa que el creador del producto sea el mismo que esta autenticado
+    const puedeBorrar = () => {
+        if(!usuario) return false;
+
+        if(creador.id === usuario.uid){
+            return true;
+        }
+    }
+
+    //Eliminar producto de la DB
+    const eliminarProducto = async () => {
+        await Promise.all([
+            eliminarDocumento("productos", id),
+            borrarImagen(urlImagen)
+        ])
+        push("/")
     }
 
     return ( 
@@ -182,6 +199,14 @@ const Producto = () => {
                                 <p style={{ "textAlign": "center" }}>{ votos } Votos</p>
                             </aside>
                         </div>
+                        {
+                            creador &&
+                            puedeBorrar() &&
+                            <button
+                                className='boton boton--orange block'
+                                onClick={ eliminarProducto }
+                            >Eliminar Producto</button>
+                        }
                     </div>
             }
 

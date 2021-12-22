@@ -1,9 +1,10 @@
 import React, { createContext } from 'react';
 import "firebase/auth";
 import { applyActionCode, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile } from 'firebase/auth';
-import { auth, db } from './config';
+import { auth, db, storage } from './config';
 import { useAutenticacion } from '../hooks/useAutenticacion';
-import { addDoc, collection, doc, getDoc, getDocs, orderBy, updateDoc } from 'firebase/firestore';
+import { ref, deleteObject } from '@firebase/storage';
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, orderBy, updateDoc } from 'firebase/firestore';
 
 export const FirebaseContext = createContext();
 
@@ -15,7 +16,6 @@ export const FirebaseFn = ({ children }) => {
         return await updateProfile( auth.currentUser, {
             displayName: nombre
         })
-
     }
 
     //Inicia sesión del usuario
@@ -62,6 +62,16 @@ export const FirebaseFn = ({ children }) => {
         await updateDoc( doc(db, coleccion, documentoId), campos)
     }
 
+    //Eliminar Campos
+    const eliminarDocumento = async ( coleccion, documentoId ) => {
+        await deleteDoc( doc(db, coleccion, documentoId) );
+    }
+
+    const borrarImagen = async (refUrl) => {
+        const refImage = ref( storage, refUrl );
+        await deleteObject( refImage );
+    }
+
     return (
         <FirebaseContext.Provider value={{
             agregarUsuario,
@@ -71,7 +81,9 @@ export const FirebaseFn = ({ children }) => {
             agregarDatosColeccion,
             obtenerDatosColeccionOrdenado,
             obtenerDocumento,
-            actualizarCampos
+            actualizarCampos,
+            eliminarDocumento,
+            borrarImagen
         }}>
             { children }
         </FirebaseContext.Provider>

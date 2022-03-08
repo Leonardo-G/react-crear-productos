@@ -22,7 +22,7 @@ const Buscar = () => {
         if(q){
             obtenerDatos();
         }
-  
+        //eslint-disable-next-line
     }, [q])
 
 

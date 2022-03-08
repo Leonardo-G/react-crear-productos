@@ -5,7 +5,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 export const DetallesProducto = ({ id, comentarios, creado, descripcion, empresa, nombre, url, urlImagen, votos }) => {
-    console.log(new Date(creado).getDay())
+    
+    const fechaRestante = new Date() - creado;
+    const diasRestantes = Math.round(fechaRestante/(1000*60*60*24));
+    const mesesRestante = new Date().getMonth() - new Date(creado).getMonth() + (12 * (new Date().getFullYear() - new Date(creado).getFullYear()));
+    
     return (
         <li className={ styles.producto }>
             <div className={ styles.descripcion }>
@@ -27,9 +31,10 @@ export const DetallesProducto = ({ id, comentarios, creado, descripcion, empresa
                         </div>
                     </div>
                     {
-                        ( new Date().getDay() - new Date(Number(creado)).getDay() ) == 0
-                        ?   <p>Creado hace: { new Date().getHours() - new Date(Number(creado)).getHours() } Horas</p>
-                        :   <p>Creado hace: { new Date().getDay() - new Date(Number(creado)).getDay() } Dias</p>
+                        (diasRestantes >= 0 && diasRestantes < 30)
+                        ?   <p>Publicado hace { diasRestantes } días</p>
+                        :   diasRestantes > 30
+                        &&   <p>Publicado hace { mesesRestante } meses</p>
                     }
                 </div>
             </div>

@@ -16,7 +16,7 @@ export default function Home() {
 
   useEffect(() => {
     obtenerDatos();
-
+    //eslint-disable-next-line
   }, [])
 
   return (
